@@ -8,31 +8,30 @@ console.log(filePath);
 //     console.log('done')
 // })
 
-fs.rmdir(
-  __dirname + '/copy-files',
-  {
-    recursive: true,
-  },
-  (err) => {
+function copyDir(filePath) {
+  fs.rmdir(
+    __dirname + '/copy-files',
+    {
+      recursive: true,
+    },
+    (err) => {
+      fs.mkdir(__dirname + '/copy-files', (err) => {
+        if (err) throw err;
 
-    fs.mkdir(__dirname + '/copy-files', (err) => {
-        if (err) throw err
-      
-      
         fs.readdir(filePath, { withFileTypes: true }, (err, fileNames) => {
           for (let files of fileNames) {
-            fs.copyFile(filePath + '/' + files.name, __dirname + '/copy-files/' + files.name, (err) => {
-              if (err) throw err;
-            });
+            fs.copyFile(
+              filePath + '/' + files.name,
+              __dirname + '/copy-files/' + files.name,
+              (err) => {
+                if (err) throw err;
+              },
+            );
           }
         });
-      
       });
+    },
+  );
+}
 
-
-  },
-);
-
-
-
-
+copyDir(filePath)
