@@ -37,27 +37,17 @@ async function bundleFile(from, to, ext) {
 }
 
 async function insertTemplates(filePath, options) {
-  // let fileData = path.parse(filePath)
   await fs.promises.copyFile(filePath, options.to + '/' + options.name);
-
   let fileNames = await fs.promises.readdir(options.pathOfTemplates);
-
-  console.log(fileNames);
-
   for (let fileName of fileNames) {
     let ext = path.extname(fileName);
-    // console.log(ext)
     if (ext === options.ext) {
-      // console.log(fileName)
       let txt0 = await takeTextInFile(options.to + '/' + options.name);
       let txt1 = await takeTextInFile(options.pathOfTemplates + '/' + fileName);
-      // console.log(txt.toString())
-
       let replacedTxt = txt0
         .toString()
         .replace(new RegExp(`{{${fileName.slice(0, -options.ext.length)}}}`, 'g'), txt1.toString());
-
-      await fs.promises.writeFile(options.to + '/' + options.name,replacedTxt);
+      await fs.promises.writeFile(options.to + '/' + options.name, replacedTxt);
     }
   }
 }
